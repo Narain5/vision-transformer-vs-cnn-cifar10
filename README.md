@@ -1,55 +1,95 @@
 # Vision Transformer vs CNN for CIFAR-10
 
 ## Overview
-This project presents a comparative analysis of Convolutional Neural Networks (CNNs) and Vision Transformers (ViTs) for image classification on the CIFAR-10 dataset. Both models were implemented from scratch using PyTorch and evaluated using identical training pipelines.
+This project presents a comparative study of **Convolutional Neural Networks (CNNs)** and **Vision Transformer (ViT)** architectures for image classification on the **CIFAR-10** dataset. Both models were implemented, trained, and evaluated using **PyTorch**, with a focus on performance, generalization, and class-level behavior.
+
+The results demonstrate that Vision Transformers can significantly outperform traditional CNNs even on relatively small image datasets when trained with appropriate optimization and regularization strategies.
+
+---
 
 ## Dataset
-- CIFAR-10 (50,000 training images, 10,000 test images)
-- 10 classes including airplane, automobile, bird, cat, dog, ship, truck, etc.
-- Data augmentation: random crop, horizontal flip
-- Normalization using dataset-specific mean and std
+- **CIFAR-10**
+- 60,000 RGB images of size **32×32**
+  - 50,000 training images
+  - 10,000 test images
+- 10 classes:
+  - airplane, automobile, bird, cat, deer  
+  - dog, frog, horse, ship, truck
+- Preprocessing and augmentation:
+  - Normalization using dataset-specific mean and standard deviation
+  - Random horizontal flip
+  - Random cropping
+
+---
 
 ## Models Implemented
+
 ### CNN Baseline
-- 3 convolutional blocks with BatchNorm, MaxPooling, Dropout
-- ~1.3M parameters
-- Optimizer: Adam
-- Test Accuracy: **61.24%**
+- 3 convolutional blocks:
+  - Conv2D → Batch Normalization → ReLU
+  - MaxPooling and Dropout
+- Fully connected classification head
+- Optimizer: **Adam**
+- Number of parameters: ~1.3M
 
 ### Vision Transformer (ViT)
-- Patch embedding with Conv2D (patch size = 4)
-- 9 Transformer encoder blocks
-- Learnable class token + positional encoding
-- Optimizer: AdamW with cosine annealing
-- ~4M parameters
-- Test Accuracy: **79.34%**
+- Patch embedding using Conv2D (patch size = 4)
+- Learnable class token and positional embeddings
+- 9 Transformer encoder blocks:
+  - Multi-head self-attention
+  - MLP with residual connections
+- Optimizer: **AdamW**
+- Learning rate scheduler: **Cosine Annealing**
+- Number of parameters: ~4M
 
-## Results Summary
-| Model | Test Accuracy | Parameters |
-|------|---------------|------------|
-| CNN | 61.24% | ~1.3M |
-| Vision Transformer | **79.34%** | ~4M |
+---
 
-Vision Transformer demonstrated superior generalization and class separability, even on a small-scale dataset like CIFAR-10.
+## Training Pipeline
+- Loss Function: **Cross Entropy Loss**
+- Batch Size: **128**
+- Epochs: **40**
+- Regularization:
+  - Dropout
+  - Weight decay (ViT)
+- Training performed on **GPU (CUDA)**
+- Evaluation metrics:
+  - Accuracy
+  - Confusion matrices
+
+---
+
+## Results
+
+| Model | Test Accuracy |
+|------|---------------|
+| CNN | 61.24% |
+| Vision Transformer | **79.34%** |
+
+### Key Observations
+- Vision Transformer achieves superior generalization compared to CNN
+- Reduced confusion among visually similar classes
+- Stable training behavior without severe overfitting
+
+---
 
 ## Visualizations
-- Training & validation curves
-- Confusion matrices
-- Sample prediction outputs
+The project includes:
+- Confusion matrices for CNN and Vision Transformer
+- Sample prediction comparisons
+- Class-wise prediction confidence analysis
 
-## Deployment
-The trained Vision Transformer model is exported in:
-- PyTorch format (`.pth`)
-- ONNX format (`.onnx`) for cross-platform inference
+All prediction-related visual outputs are available in the **`Predictions/`** directory.
 
-## Tech Stack
-- Python
-- PyTorch
-- Torchvision
-- NumPy, Matplotlib
-- CUDA (GPU training)
+---
 
-## How to Run
-```bash
-pip install -r requirements.txt
-jupyter notebook notebooks/Machine_learning_Final_project.ipynb
+## Repository Structure
+```text
+vision-transformer-vs-cnn-cifar10/
+├── Notebooks/
+│   └── Vision_transformer_CIFAR.ipynb
+├── Predictions/
+│   ├── CNN_Predictions.png
+│   └── Vision_transformer_Predictions.png
+├── Report/
+│   └── Project_Report.pdf
+└── README.md
